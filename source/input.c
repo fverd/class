@@ -2706,6 +2706,36 @@ int input_read_parameters_species(struct file_content * pfc,
 
 
   /* 7) ** ADDITIONAL SPECIES ** --> Add your species here */
+	/** 7.0) DM with sound speed */
+  /** Not to risk it isnt set, start by this and then, in case, overwrite*/
+  pba->Omega0_chi=0;
+	/* Read */
+	class_call(parser_read_double(pfc,"f_chi",&param1,&flag1,errmsg),
+						 errmsg,
+						 errmsg);
+	class_call(parser_read_double(pfc,"omega_chi",&param2,&flag2,errmsg),
+						 errmsg,
+						 errmsg);
+
+	class_test(((flag1 == _TRUE_) && (flag2 == _TRUE_)),
+						 errmsg,
+						 "You can only enter one of 'f_chi' or 'omega_chi'.");
+
+	/* ---> if user passes directly the density of chi */
+	if (flag1 == _TRUE_)
+		pba->Omega0_chi = param1/(1 - param1) * (pba->Omega0_cdm+pba->Omega0_b);
+	if (flag2 == _TRUE_)
+		pba->Omega0_chi = param2/pba->h/pba->h;
+
+	class_test(pba->Omega0_chi<0.,errmsg,"You cannot set the chi density to negative values.");
+  
+  // Other chi parameters
+  if (pba->Omega0_chi > 0.) {
+    class_read_double("acs_chi",pba->acs_chi);
+    class_read_double("cs2_peak_chi",pba->cs2_peak_chi);
+  }
+
+
 
   /** 7.1) Decaying DM into DR */
   /** 7.1.a) Omega_0_dcdmdr (DCDM, i.e. decaying CDM) */
@@ -3206,6 +3236,7 @@ int input_read_parameters_species(struct file_content * pfc,
   Omega_tot += pba->Omega0_dcdmdr;
   Omega_tot += pba->Omega0_idr;
   Omega_tot += pba->Omega0_ncdm_tot;
+  Omega_tot += pba->Omega0_chi;
   /* Step 1 */
   if (flag1 == _TRUE_){
     pba->Omega0_lambda = param1;
