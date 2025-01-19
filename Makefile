@@ -19,7 +19,7 @@ vpath .base build
 ########################################################
 
 # your C compiler:
-CC       = gcc-12
+CC       = gcc
 #CC       = icc
 #CC       = pgcc
 CPP      = g++ --std=c++11 -fpermissive -Wno-write-strings
@@ -32,7 +32,7 @@ AR        = ar rv
 # substitute python3 to python in the line below, or you can simply
 # add a compilation option on the terminal command line:
 # "PYTHON=python3 make all" (Thanks to Marius Millea for python3 compatibility)
-PYTHON ?= python3
+PYTHON ?= python
 
 # your optimization flag
 OPTFLAG = -O3
@@ -40,7 +40,7 @@ OPTFLAG = -O3
 #OPTFLAG = -fast
 
 # your openmp flag (comment for compiling without openmp)
-OMPFLAG   = -fopenmp
+OMPFLAG   = -pthread #-fopenmp
 #OMPFLAG   = -mp -mp=nonuma -mp=allcores -g
 #OMPFLAG   = -openmp
 
