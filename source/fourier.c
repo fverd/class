@@ -1751,7 +1751,7 @@ int fourier_indices(
       first) */
 
   pfo->has_pk_m = _TRUE_;
-  if (pba->has_ncdm == _TRUE_) {
+  if (pba->has_ncdm == _TRUE_ || pba->has_chi == _TRUE_ ) {
     pfo->has_pk_cb = _TRUE_;
   }
   else {
