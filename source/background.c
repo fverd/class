@@ -392,6 +392,8 @@ int background_functions(
   double rho_m;
   /* background ncdm quantities */
   double rho_ncdm,p_ncdm,pseudo_p_ncdm;
+	/* background chi quantities */
+  double rho_chi,kJ_chi;
   /* index for n_ncdm species */
   int n_ncdm;
   /* fluid's time-dependent equation of state parameter */
@@ -529,6 +531,15 @@ int background_functions(
     }
   }
 
+	/* Sound speed dark matter */
+	if (pba->has_chi == _TRUE_) {
+  //Store everything in the background table
+  pvecback[pba->index_bg_rho_chi] = pba->Omega0_chi * pow(pba->H0,2) / pow(a,3);
+  rho_tot += pvecback[pba->index_bg_rho_chi];
+  p_tot += 0.;
+  rho_m += pvecback[pba->index_bg_rho_chi];
+	}
+
   /* Lambda */
   if (pba->has_lambda == _TRUE_) {
     pvecback[pba->index_bg_rho_lambda] = pba->Omega0_lambda * pow(pba->H0,2);
@@ -642,6 +653,17 @@ int background_functions(
     /*  */
 
   }
+
+	/* Sound speed dark matter, store kJeans */
+	if (pba->has_chi == _TRUE_) {
+  //Store kJeans
+  double cs2_chi = pba->cs2_peak_chi; 
+  double acs_chi = pba->acs_chi;
+  if (a > acs_chi) cs2_chi = pba->cs2_peak_chi * pow(acs_chi/a,2);
+  // printf("%e",pba->cs2_peak_chi * pow(acs_chi/a,2));pvecback[pba->index_bg_Omega_m]
+  pvecback[pba->index_bg_kJ_chi]=sqrt(3./2.* pvecback[pba->index_bg_Omega_m])*a*pvecback[pba->index_bg_H]/pba->h/sqrt(cs2_chi);
+	}
+
 
   return _SUCCESS_;
 
@@ -978,6 +1000,7 @@ int background_indices(
   pba->has_cdm = _FALSE_;
   pba->has_idm = _FALSE_;
   pba->has_ncdm = _FALSE_;
+	pba->has_chi = _FALSE_;
   pba->has_dcdm = _FALSE_;
   pba->has_dr = _FALSE_;
   pba->has_scf = _FALSE_;
@@ -996,6 +1019,10 @@ int background_indices(
 
   if (pba->Omega0_ncdm_tot != 0.)
     pba->has_ncdm = _TRUE_;
+
+	if (pba->Omega0_chi != 0.){
+	   pba->has_chi = _TRUE_;
+   }
 
   if (pba->Omega0_dcdmdr != 0.) {
     pba->has_dcdm = _TRUE_;
@@ -1056,6 +1083,11 @@ int background_indices(
   class_define_index(pba->index_bg_rho_ncdm1,pba->has_ncdm,index_bg,pba->N_ncdm);
   class_define_index(pba->index_bg_p_ncdm1,pba->has_ncdm,index_bg,pba->N_ncdm);
   class_define_index(pba->index_bg_pseudo_p_ncdm1,pba->has_ncdm,index_bg,pba->N_ncdm);
+
+	/* - index for chi */
+  class_define_index(pba->index_bg_rho_chi,pba->has_chi,index_bg,1);
+	class_define_index(pba->index_bg_kJ_chi,pba->has_chi,index_bg,1);
+
 
   /* - index for dcdm */
   class_define_index(pba->index_bg_rho_dcdm,pba->has_dcdm,index_bg,1);
@@ -2108,7 +2140,9 @@ int background_solve(
       pba->Omega0_nfsm += pba->Omega0_ncdm[n_ncdm];
     }
   }
-
+	// if (pba->has_chi == _TRUE_)
+  //   pba->Omega0_nfsm += pba->Omega0_chi;
+	//update threshold as for ncdm
   free(pvecback);
   free(pvecback_integration);
   free(used_in_output);
@@ -2449,6 +2483,9 @@ int background_output_titles(
       class_store_columntitle(titles,tmp,_TRUE_);
     }
   }
+	class_store_columntitle(titles,"(.)rho_chi",pba->has_chi);
+	class_store_columntitle(titles,"(.)kJ_chi",pba->has_chi);
+
   class_store_columntitle(titles,"(.)rho_lambda",pba->has_lambda);
   class_store_columntitle(titles,"(.)rho_fld",pba->has_fld);
   class_store_columntitle(titles,"(.)w_fld",pba->has_fld);
@@ -2522,6 +2559,8 @@ int background_output_data(
         class_store_double(dataptr,pvecback[pba->index_bg_p_ncdm1+n],_TRUE_,storeidx);
       }
     }
+		class_store_double(dataptr,pvecback[pba->index_bg_rho_chi],pba->has_chi,storeidx);
+		class_store_double(dataptr,pvecback[pba->index_bg_kJ_chi],pba->has_chi,storeidx);
     class_store_double(dataptr,pvecback[pba->index_bg_rho_lambda],pba->has_lambda,storeidx);
     class_store_double(dataptr,pvecback[pba->index_bg_rho_fld],pba->has_fld,storeidx);
     class_store_double(dataptr,pvecback[pba->index_bg_w_fld],pba->has_fld,storeidx);
@@ -2634,6 +2673,9 @@ int background_derivs(
   }
   if (pba->has_idm == _TRUE_){
     rho_M += pvecback[pba->index_bg_rho_idm];
+  }
+  if (pba->has_chi == _TRUE_){
+    rho_M += pvecback[pba->index_bg_rho_chi];
   }
 
   dy[pba->index_bi_D] = y[pba->index_bi_D_prime]/a/H;
@@ -2821,7 +2863,10 @@ int background_output_budget(
         budget_matter+=pba->Omega0_ncdm[index_ncdm];
       }
     }
-
+		if (pba->has_chi == _TRUE_) {
+      class_print_species("Dark Matter with sound speed:",chi);
+      budget_matter+=pba->Omega0_chi;
+    }
     printf(" ---> Relativistic Species \n");
     class_print_species("Photons",g);
     budget_radiation+=pba->Omega0_g;
