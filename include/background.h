@@ -98,6 +98,10 @@ struct background
   int * ncdm_input_q_size; /**< Vector of numbers of q bins */
   double * ncdm_qmax;      /**< Vector of maximum value of q */
 
+	double Omega0_chi; /**< \f$ \Omega_{0 chi} \f$: sound speed dark matter */
+  double acs_chi;  /**< Generic parameter for sound speed  */
+  double cs2_peak_chi;  /**< Sound speed peak value */
+
   double Omega0_k;         /**< \f$ \Omega_{0_k} \f$: curvature contribution */
 
   double Omega0_lambda;    /**< \f$ \Omega_{0_\Lambda} \f$: cosmological constant */
@@ -147,6 +151,9 @@ struct background
   double tau_eq;    /**< conformal time at radiation/matter equality [Mpc] */
 
   //@}
+ // Sound speed quantities
+  double rho_chi; /**< total non-free-streaming matter, that is, cdm, baryons and wdm */
+  double kJ_chi; /**< total non-free-streaming matter, that is, cdm, baryons and wdm */
 
 
   /** @name - all indices for the vector of background (=bg) quantities stored in table */
@@ -185,6 +192,9 @@ struct background
   int index_bg_rho_ncdm1;     /**< density of first ncdm species (others contiguous) */
   int index_bg_p_ncdm1;       /**< pressure of first ncdm species (others contiguous) */
   int index_bg_pseudo_p_ncdm1;/**< another statistical momentum useful in ncdma approximation */
+
+	int index_bg_rho_chi;    /**< density of cannibalistic dark matter specie*/
+  int index_bg_kJ_chi;		/**< kJ for dark matter specie */
 
   int index_bg_rho_tot;       /**< Total density */
   int index_bg_p_tot;         /**< Total pressure */
@@ -285,6 +295,7 @@ struct background
   short has_dr;        /**< presence of relativistic decay radiation? */
   short has_scf;       /**< presence of a scalar field? */
   short has_ncdm;      /**< presence of non-cold dark matter? */
+	short has_chi;    /**< presence of cannibalistic dark matter? */
   short has_lambda;    /**< presence of cosmological constant? */
   short has_fld;       /**< presence of fluid with constant w and cs2? */
   short has_ur;        /**< presence of ultra-relativistic neutrinos/relics? */
@@ -589,6 +600,9 @@ extern "C" {
 #define _c_ 2.99792458e8            /**< c in m/s */
 #define _G_ 6.67428e-11             /**< Newton constant in m^3/Kg/s^2 */
 #define _eV_ 1.602176487e-19        /**< 1 eV expressed in J */
+#define _eV_in_invMpc 1.5637e29        /**< 1 eV expressed in Mpc^-1 */
+#define _M_p_in_invMpc 3.7986e56        /**< approxPlanck mass expressed in Mpc^-1 */
+#define _M_p_in_ev 2.435e27        /**< Planck mass expressed in eV */
 
 /* parameters entering in Stefan-Boltzmann constant sigma_B */
 #define _k_B_ 1.3806504e-23

@@ -242,6 +242,7 @@ struct perturbations
   short has_source_delta_b;    /**< do we need source for delta of baryons? */
   short has_source_delta_cdm;  /**< do we need source for delta of cold dark matter? */
   short has_source_delta_idm;  /**< do we need source for delta of interacting dark matter */
+  short has_source_delta_chi;/**< do we need source for delta of sound speed dark matter */
   short has_source_delta_idr;  /**< do we need source for delta of interacting dark radiation? */
   short has_source_delta_dcdm; /**< do we need source for delta of DCDM? */
   short has_source_delta_fld;  /**< do we need source for delta of dark energy? */
@@ -256,6 +257,7 @@ struct perturbations
   short has_source_theta_b;    /**< do we need source for theta of baryons? */
   short has_source_theta_cdm;  /**< do we need source for theta of cold dark matter? */
   short has_source_theta_idm;  /**< do we need source for theta of interacting dark matter */
+  short has_source_theta_chi;  /**< do we need source for theta of cannibalistic dark matter */
   short has_source_theta_idr;  /**< do we need source for theta of interacting dark radiation? */
   short has_source_theta_dcdm; /**< do we need source for theta of DCDM? */
   short has_source_theta_fld;  /**< do we need source for theta of dark energy? */
@@ -290,6 +292,7 @@ struct perturbations
   int index_tp_delta_b;   /**< index value for delta of baryons */
   int index_tp_delta_cdm; /**< index value for delta of cold dark matter */
   int index_tp_delta_idm; /**< index value for delta of interacting dark matter */
+  int index_tp_delta_chi; /**< index value for delta of cannibalistic dark matter */
   int index_tp_delta_dcdm;/**< index value for delta of DCDM */
   int index_tp_delta_fld;  /**< index value for delta of dark energy */
   int index_tp_delta_scf;  /**< index value for delta of scalar field */
@@ -312,6 +315,7 @@ struct perturbations
   int index_tp_theta_ur;    /**< index value for theta of ultra-relativistic neutrinos/relics */
   int index_tp_theta_idr;   /**< index value for theta of interacting dark radiation */
   int index_tp_theta_idm;   /**< index value for theta of interacting dark matter */
+  int index_tp_theta_chi;   /**< index value for theta of cannibalistic dark matter */
   int index_tp_theta_dr;    /**< index value for F1 of decay radiation */
   int index_tp_theta_ncdm1; /**< index value for theta of first non-cold dark matter species (e.g. massive neutrinos) */
 
@@ -394,6 +398,7 @@ struct perturbations
                                final time range required for the output of
                                Fourier transfer functions (used for interpolations) */
   int ln_tau_size;         /**< total number of values in this array */
+  int index_ln_tau_pk;     /**< first index relevant for output of P(k,z) and T(k,z) */
 
   double *** late_sources; /**< Pointer towards the source interpolation table
                               late_sources[index_md]
@@ -473,6 +478,8 @@ struct perturbations_vector
   int index_pt_theta_cdm; /**< cdm velocity */
   int index_pt_delta_idm; /**< idm density */
   int index_pt_theta_idm; /**< idm velocity */
+  int index_pt_delta_chi; /**< chi density */
+  int index_pt_theta_chi; /**< chi velocity */
   int index_pt_delta_dcdm; /**< dcdm density */
   int index_pt_theta_dcdm; /**< dcdm velocity */
   int index_pt_delta_fld;  /**< dark energy density in true fluid case */
