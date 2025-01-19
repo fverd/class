@@ -1,0 +1,4 @@
+Using fx=1.0e-01, kref=0.45, rtol=1.0e-03 and neval=1000
+The value of aNR that gives kref=0.45 is 7.13e-04, found by shooting
+Starting integral
+slurmstepd: error: *** JOB 10981 ON eos CANCELLED AT 2025-01-15T14:19:35 ***
