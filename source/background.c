@@ -534,9 +534,16 @@ int background_functions(
 	/* Sound speed dark matter */
 	if (pba->has_chi == _TRUE_) {
   //Store everything in the background table
-  pvecback[pba->index_bg_rho_chi] = pba->Omega0_chi * pow(pba->H0,2) / pow(a,3);
+
+    if (a > pba->acs_chi){
+      pvecback[pba->index_bg_rho_chi] = pba->Omega0_chi * pow(pba->H0, 2) / pow(a, 3);
+    }
+    else {
+      pvecback[pba->index_bg_rho_chi] = pba->Omega0_chi * pow(pba->H0, 2) / pow(pba->acs_chi, 3); /* Axion-like: prima dello scongelamento ha rho fissata */
+    }
+
   rho_tot += pvecback[pba->index_bg_rho_chi];
-  p_tot += 0.;
+  p_tot += 0.; /* Da vedere se aggiungerci qualcosa pre scongelamento, comunque non dovrebbe contare un cazzo */
   rho_m += pvecback[pba->index_bg_rho_chi];
 	}
 
@@ -659,8 +666,7 @@ int background_functions(
   //Store kJeans
   double cs2_chi = pba->cs2_peak_chi; 
   double acs_chi = pba->acs_chi;
-  if (a > acs_chi) cs2_chi = pba->cs2_peak_chi * pow(acs_chi/a,2);
-  // printf("%e",pba->cs2_peak_chi * pow(acs_chi/a,2));pvecback[pba->index_bg_Omega_m]
+  if (a > acs_chi) cs2_chi = pba->cs2_peak_chi * pow(acs_chi/a,1.5);
   pvecback[pba->index_bg_kJ_chi]=sqrt(3./2.* pvecback[pba->index_bg_Omega_m])*a*pvecback[pba->index_bg_H]/pba->h/sqrt(cs2_chi);
 	}
 
@@ -2864,7 +2870,7 @@ int background_output_budget(
       }
     }
 		if (pba->has_chi == _TRUE_) {
-      class_print_species("Dark Matter with sound speed:",chi);
+      class_print_species("Dark Matter with sound speed (ULAs version):",chi);
       budget_matter+=pba->Omega0_chi;
     }
     printf(" ---> Relativistic Species \n");

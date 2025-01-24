@@ -9403,7 +9403,7 @@ int perturbations_derivs(double tau,
 
       cs2_chi = pba->cs2_peak_chi; 
 
-      if (a > pba->acs_chi) cs2_chi = pba->cs2_peak_chi * pow(pba->acs_chi/a,2);
+      if (a > pba->acs_chi) cs2_chi = pba->cs2_peak_chi * pow(pba->acs_chi/a,1.5);
 
       /** - ----> chi fluid density */
       dy[pv->index_pt_delta_chi] =-(y[pv->index_pt_theta_chi]+metric_continuity)
