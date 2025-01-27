@@ -1,85 +1,40 @@
 #!/usr/bin/env python3
 # coding: utf-8
-# import classy module
-from classy import Class
+
 import numpy as np
+import matplotlib.pyplot as plt
+import sys
+from scipy.interpolate import interp1d
+from scipy.optimize import root
+import importlib
+import classy
+from scipy.special import sici
+from classy import Class
 
 common_settings = {
 'omega_b':0.0223828,
 'h':0.67810,
 'z_reio':7.6711,
 'YHe':0.25,
-'N_ur': 3.05,
-'perturbations_verbose':0,
-'background_verbose':0,
-'fourier_verbose':3,
-'output':'mPk',
+'perturbations_verbose':1,
+'background_verbose':3,
+'output':'mTk, vTk, mPk',
 'gauge':'newtonian',
 'P_k_max_1/Mpc':10,
-'z_max_pk':3000,
-# 'k_min_tau0':0.0001,
-
-# 'k_min_tau0':100.,
-# 'evolver': 'rk'
+'z_max_pk':1000,
+'format':'class',
 }
 
+# ChatGPT says that 1 eV = 4.827e19 invMpc
 chiCDM = Class()
-# pass input parameters
 chiCDM.set(common_settings)
-
-
+aNR= 0.01
 chiCDM.set({
-'omega_cdm':0.12,
-'omega_chi':0.01,
-'acs_chi':1.e-3,
-'cs2_peak_chi':1/3,
-# 'N_ncdm':1,
-# 'm_ncdm':0.4
+'N_ur': 3.046,
+'omega_cdm':0.10 ,
+'omega_chi':0.02 ,
+'m_ax':1.e-28*1.56e29,
 })
+print(f'm_a of 1.56e29 corresponds to {1.e-26*1.56e29}')
 
-standardCDM = Class()
-standardCDM.set(common_settings)
-standardCDM.set({'omega_cdm':0.12})
-
-# run class
 chiCDM.compute()
-
-standardCDM.compute()
-
-
-
-
-
-import matplotlib.pyplot as plt
-from math import pi
-
-kk = np.logspace(-4,np.log10(1),500) # k in h/Mpc
-Pkcann = [] # P(k) in (Mpc/h)**3
-Pkstand = [] # P(k) in (Mpc/h)**3
-h = chiCDM.h() # get reduced Hubble for conversions to 1/Mpc
-
-lowz=10.
-
-for k in kk:
-    Pkcann.append(chiCDM.pk_cb_lin(k*h,lowz)*h**3) # function .pk(k,z)
-    Pkstand.append(standardCDM.pk_lin(k*h,lowz)*h**3 ) # function .pk(k,z)
-Pkcann=np.array(Pkcann)
-# Pkcann *= Pkstand[0]/Pkcann[0] #normalize to LCDM large scale
-
-plt.figure(figsize=(4,3))
-plt.xscale('log');plt.yscale('log');plt.xlim(kk[0],kk[-1])
-plt.xlabel(r'$k \,\,\,\, [h/\mathrm{Mpc}]$')
-plt.ylabel(r'$P(k) \,\,\,\, [\mathrm{Mpc}/h]^3$')
-
-plt.plot(kk,Pkstand,'k-',label=r'Standard CDM')
-plt.plot(kk,Pkcann,'r-',label=r'$f_\chi$')
-
-plt.title(f'z={str(lowz)}')
-
-plt.legend(loc='best')
-plt.savefig('/home/fverdian/class/soundspeed-scripts/figure/soundspeed_mpk.pdf',bbox_inches='tight')
-
-
-
-chiCDM.empty()
-standardCDM.empty()

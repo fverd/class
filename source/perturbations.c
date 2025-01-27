@@ -9401,14 +9401,10 @@ int perturbations_derivs(double tau,
     /** - ---> FRAchi fluid equations*/
     if (pba->has_chi == _TRUE_) {
 
-      cs2_chi = pba->cs2_peak_chi; 
-
-      if (a > pba->acs_chi) cs2_chi = pba->cs2_peak_chi * pow(pba->acs_chi/a,1.5);
-
+      // cs2_chi = pba->cs2_peak_chi * pow(pba->acs_chi/a,1.5);
+      cs2_chi = (0.25 * k2 / a2 / pow(pba->m_ax, 2)) / (1 + (0.25 * k2 / a2 / pow(pba->m_ax , 2)));
       /** - ----> chi fluid density */
-      dy[pv->index_pt_delta_chi] =-(y[pv->index_pt_theta_chi]+metric_continuity)
-      -3.*cs2_chi*a_prime_over_a*y[pv->index_pt_delta_chi]
-      -9.*cs2_chi*a_prime_over_a*a_prime_over_a*y[pv->index_pt_theta_chi]/k2; //copiato da fld
+      dy[pv->index_pt_delta_chi] = -(y[pv->index_pt_theta_chi] + metric_continuity) - 3. * cs2_chi * a_prime_over_a * y[pv->index_pt_delta_chi] - 9. * cs2_chi * a_prime_over_a * a_prime_over_a * y[pv->index_pt_theta_chi] / k2; // copiato da fld
       /** - ----> chi fluid velocity */
       dy[pv->index_pt_theta_chi] =
       -(1.-3.*cs2_chi)*a_prime_over_a*y[pv->index_pt_theta_chi] //copiato da fld

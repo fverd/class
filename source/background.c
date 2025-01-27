@@ -533,13 +533,14 @@ int background_functions(
 
 	/* Sound speed dark matter */
 	if (pba->has_chi == _TRUE_) {
-  //Store everything in the background table
-
-    if (a > pba->acs_chi){
+    // Parrebbe che pvecback[pba->index_bg_H] sia proprio in invMpc
+    if (a > pba->acs_chi)
+    {
       pvecback[pba->index_bg_rho_chi] = pba->Omega0_chi * pow(pba->H0, 2) / pow(a, 3);
     }
     else {
-      pvecback[pba->index_bg_rho_chi] = pba->Omega0_chi * pow(pba->H0, 2) / pow(pba->acs_chi, 3); /* Axion-like: prima dello scongelamento ha rho fissata */
+      pvecback[pba->index_bg_rho_chi] = pba->Omega0_chi * pow(pba->H0, 2) / pow(pba->acs_chi, 3);
+      /* Axion-like: prima dello scongelamento ha rho fissata, using acs_chi as a placeholder */
     }
 
   rho_tot += pvecback[pba->index_bg_rho_chi];
@@ -664,10 +665,10 @@ int background_functions(
 	/* Sound speed dark matter, store kJeans */
 	if (pba->has_chi == _TRUE_) {
   //Store kJeans
-  double cs2_chi = pba->cs2_peak_chi; 
+  double cs2_chi = pba->m_ax;
   double acs_chi = pba->acs_chi;
-  if (a > acs_chi) cs2_chi = pba->cs2_peak_chi * pow(acs_chi/a,1.5);
-  pvecback[pba->index_bg_kJ_chi]=sqrt(3./2.* pvecback[pba->index_bg_Omega_m])*a*pvecback[pba->index_bg_H]/pba->h/sqrt(cs2_chi);
+  // if (a > acs_chi) cs2_chi = pba->cs2_peak_chi * pow(acs_chi/a,1.5);
+  // pvecback[pba->index_bg_kJ_chi]=sqrt(3./2.* pvecback[pba->index_bg_Omega_m])*a*pvecback[pba->index_bg_H]/pba->h/sqrt(cs2_chi);
 	}
 
 

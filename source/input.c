@@ -2732,10 +2732,9 @@ int input_read_parameters_species(struct file_content * pfc,
   // Other chi parameters
   if (pba->Omega0_chi > 0.) {
     class_read_double("acs_chi",pba->acs_chi);
-    class_read_double("cs2_peak_chi",pba->cs2_peak_chi);
+    class_read_double("m_ax", pba->m_ax);
+    pba->acs_chi = pow(100 * pba->m_ax / pba->h, -2. / 3.);
   }
-
-
 
   /** 7.1) Decaying DM into DR */
   /** 7.1.a) Omega_0_dcdmdr (DCDM, i.e. decaying CDM) */

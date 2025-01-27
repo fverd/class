@@ -100,7 +100,7 @@ struct background
 
 	double Omega0_chi; /**< \f$ \Omega_{0 chi} \f$: sound speed dark matter */
   double acs_chi;  /**< Generic parameter for sound speed  */
-  double cs2_peak_chi;  /**< Sound speed peak value */
+  double m_ax;  /**< Axion mass in invMpc */
 
   double Omega0_k;         /**< \f$ \Omega_{0_k} \f$: curvature contribution */
 
