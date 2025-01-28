@@ -104,7 +104,7 @@ def Pnum_int(vars, kev):
 #--------
 print('Starting integral')
 for kEval in kevList:
-    integ = vegas.Integrator([[np.log(1.e-3), np.log(1.)], [0., 1.]],mpi=True, nproc=48)
+    integ = vegas.Integrator([[np.log(1.e-3), np.log(1.)], [0., 1.]],mpi=True, nproc=70)
     traindcTc22,traindcTx22 = integ(functools.partial(training_int, kev=kEval),neval=10000)
     start_time = time.time()
     result = integ(functools.partial(Pnum_int, kev=kEval), neval=args.neval)

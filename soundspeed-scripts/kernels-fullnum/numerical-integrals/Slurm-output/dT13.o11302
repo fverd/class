@@ -1,0 +1,5 @@
+Using fx=1.0e-01, kref=0.08, rtol=1.0e-03 and neval=1000
+The value of aNR that gives kref=0.08 is 4.01e-03, found by shooting
+Starting integral
+At k=0.050 done: took 0m 54s
+slurmstepd: error: *** JOB 11302 ON eos CANCELLED AT 2025-01-28T11:36:32 ***
