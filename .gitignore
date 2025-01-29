@@ -6,12 +6,7 @@ class
 *.ini
 libclass.a
 *out
-python/classy.c
-python/*.pyc
-python/build/
-
-
-
+python/classy.cpp
 *.pyc
 python/build/
 *.dSYM
@@ -19,3 +14,4 @@ RealSpaceInterface/cache/
 .DS_Store
 doc/manual/html
 doc/manual/latex
+python/classy*
