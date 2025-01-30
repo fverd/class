@@ -1011,9 +1011,9 @@ cdef class Class:
         z : vector of z values, z[index_z]
         """
 
-        cdef np.ndarray[DTYPE_t,ndim=2] pk = np.zeros((self.fo.k_size_pk, self.fo.ln_tau_size-self.fo.index_ln_tau_pk),'float64')
+        cdef np.ndarray[DTYPE_t,ndim=2] pk = np.zeros((self.fo.k_size_pk, self.fo.ln_tau_size),'float64')
         cdef np.ndarray[DTYPE_t,ndim=1] k = np.zeros((self.fo.k_size_pk),'float64')
-        cdef np.ndarray[DTYPE_t,ndim=1] z = np.zeros((self.fo.ln_tau_size-self.fo.index_ln_tau_pk),'float64')
+        cdef np.ndarray[DTYPE_t,ndim=1] z = np.zeros((self.fo.ln_tau_size),'float64')
         cdef int index_k, index_tau, index_pk
         cdef double z_max_nonlinear, z_max_requested
 
@@ -1041,19 +1041,21 @@ cdef class Class:
         if self.fo.ln_tau_size == 1:
             raise CosmoSevereError("You ask classy to return an array of P(k,z) values, but the input parameters sent to CLASS did not require any P(k,z) calculations for z>0; pass either a list of z in 'z_pk' or one non-zero value in 'z_max_pk'")
         else:
-            for index_tau in xrange(self.fo.ln_tau_size-self.fo.index_ln_tau_pk):
-                if index_tau == self.fo.ln_tau_size-self.fo.index_ln_tau_pk-1:
+            for index_tau in xrange(self.fo.ln_tau_size):
+                if index_tau == self.fo.ln_tau_size-1:
                     z[index_tau] = 0.
                 else:
-                    z[index_tau] = self.z_of_tau(np.exp(self.fo.ln_tau[index_tau+self.fo.index_ln_tau_pk]))
+                    z[index_tau] = self.z_of_tau(np.exp(self.fo.ln_tau[index_tau]))
 
         # check consitency of the list of redshifts
 
         if nonlinear == True:
             # Check highest value of z at which nl corrections could be computed.
             # In the table tau_sampling it corresponds to index: self.fo.index_tau_min_n
-            z_max_nonlinear = self.z_of_tau(self.fo.tau[self.fo.index_tau_min_nl])
-
+            if self.fo.index_tau_min_nl == 0:
+                z_max_nonlinear = np.inf
+            else:
+                z_max_nonlinear = self.z_of_tau(self.fo.tau[self.fo.index_tau_min_nl])
             # Check highest value of z in the requested output.
             # In the table tau_sampling it corresponds to index: self.fo.tau_size - self.fo.ln_tau_size + self.fo.index_ln_tau_pk
             z_max_requested = z[0]
@@ -1062,7 +1064,7 @@ cdef class Class:
             # the first index must be smaller or equal to the second one.
             # If not, raise and error.
 
-            if (self.fo.index_tau_min_nl > self.fo.tau_size - self.fo.ln_tau_size + self.fo.index_ln_tau_pk):
+            if (self.fo.index_tau_min_nl > self.fo.tau_size - self.fo.ln_tau_size):
                 raise CosmoSevereError("get_pk_and_k_and_z() is trying to return P(k,z) up to z_max=%e (to encompass your requested maximum value of z); but the input parameters sent to CLASS (in particular ppr->nonlinear_min_k_max=%e) were such that the non-linear P(k,z) could only be consistently computed up to z=%e; increase the precision parameter 'nonlinear_min_k_max', or decrease your requested z_max"%(z_max_requested,self.pr.nonlinear_min_k_max,z_max_nonlinear))
 
         # get list of k
@@ -1077,12 +1079,12 @@ cdef class Class:
 
         # get P(k,z) array
 
-        for index_tau in xrange(self.fo.ln_tau_size-self.fo.index_ln_tau_pk):
+        for index_tau in xrange(self.fo.ln_tau_size):
             for index_k in xrange(self.fo.k_size_pk):
                 if nonlinear == True:
-                    pk[index_k, index_tau] = np.exp(self.fo.ln_pk_nl[index_pk][(index_tau+self.fo.index_ln_tau_pk) * self.fo.k_size + index_k])
+                    pk[index_k, index_tau] = np.exp(self.fo.ln_pk_nl[index_pk][index_tau * self.fo.k_size + index_k])
                 else:
-                    pk[index_k, index_tau] = np.exp(self.fo.ln_pk_l[index_pk][(index_tau+self.fo.index_ln_tau_pk) * self.fo.k_size + index_k])
+                    pk[index_k, index_tau] = np.exp(self.fo.ln_pk_l[index_pk][index_tau * self.fo.k_size + index_k])
 
         return pk, k, z
 
