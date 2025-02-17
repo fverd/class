@@ -1,0 +1,29 @@
+Using fx=1.0e-01, kref=0.45, rtol=1.0e-03 and neval=1000
+The value of aNR that gives kref=0.45 is 7.13e-04, found by shooting
+Starting integral
+At k=0.050 done: took 0m 53s
+At k=0.060 done: took 0m 54s
+At k=0.072 done: took 0m 54s
+At k=0.086 done: took 0m 54s
+At k=0.104 done: took 0m 56s
+At k=0.125 done: took 0m 58s
+At k=0.150 done: took 0m 60s
+At k=0.180 done: took 1m 6s
+At k=0.216 done: took 1m 13s
+At k=0.259 done: took 1m 19s
+At k=0.311 done: took 1m 26s
+At k=0.373 done: took 1m 31s
+At k=0.448 done: took 1m 39s
+At k=0.538 done: took 1m 48s
+At k=0.645 done: took 1m 58s
+At k=0.775 done: took 2m 11s
+At k=0.930 done: took 2m 28s
+At k=1.116 done: took 2m 51s
+At k=1.340 done: took 3m 10s
+At k=1.609 done: took 3m 30s
+At k=1.931 done: took 4m 21s
+At k=2.319 done: took 5m 19s
+At k=2.783 done: took 6m 3s
+At k=3.341 done: took 7m 1s
+At k=4.011 done: took 8m 2s
+slurmstepd: error: *** JOB 11696 ON eos CANCELLED AT 2025-02-17T13:59:16 ***
