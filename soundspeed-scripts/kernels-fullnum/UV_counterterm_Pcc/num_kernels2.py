@@ -33,6 +33,8 @@ class NumKernels:
         w0 = [1,1-3/5*fx,0.,0.]
         linsol = odeint(lin_system, w0, tlin)
         self.g_c_int=interp1d(tlin,linsol[:,1]/linsol[:, 0],bounds_error=False, fill_value=(5/4*np.sqrt(1-24/25*fx)-1/4,1))
+        self.g_c_int=interp1d(tlin,linsol[:,1]/linsol[:, 0],bounds_error=False, fill_value=(1-3/5*fx,1))
+
     # Instead solving the linear system numerically I am using analytical formulas
     # def g_c_int(self,t):
     #     # This is just a phenomenological interpolation
@@ -121,7 +123,7 @@ class NumKernels:
         b_q_kMq=x2*(mu*x-1)/2./(x2-2.*mu*x+1.)
         a_q_kPq=-mu*x;a_kPq_q=x*(x+mu)/(x2+2*x*mu+1)
         b_q_kPq=-x2*(mu*x+1)/2./(x2+2.*mu*x+1.)
-        
+        print(x,a_q_kMq,a_kMq_q,b_q_kMq)
         def F3_system(w, t):
 
             Fc3,Gc3,Fx3,Gx3 = w
