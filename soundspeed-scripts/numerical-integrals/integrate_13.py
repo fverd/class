@@ -20,7 +20,7 @@ ma=1.e-27
 zeval=0.5
 
 # kevList=np.logspace(np.log10(0.05),np.log10(0.5),30)
-kevList=np.logspace(np.log10(0.03),np.log10(0.6),80)
+kevList=np.logspace(np.log10(0.03),np.log10(0.6),30)
 
 # kevList = [0.15]
 
@@ -48,7 +48,7 @@ if not args.nosave:
     outfile='/home/fverdian/class/soundspeed-scripts/numerical-integrals/results/P13-ma'+str(-np.log10(ma)).replace('.','p')+'-fx'+str(fx).replace('.','p')+'-N'+str(args.neval)+'.txt'
     if os.path.exists(outfile):
         os.remove(outfile)
-    open(outfile, 'a').write(f'# k, dcdc13, dcdc13_EdS, dcTc13, dcTc13_EdS, dcdx13, dcdx13_EdS, dcTx13, dcTx13_EdS, PL_cc, TL_x \n')
+    open(outfile, 'a').write(f'# k, dcdc13, dcdc13_EdS, dcTc13, dcTc13_EdS, dcdx13, dcdx13_EdS, dcTx13, dcTx13_EdS, dxdx13, dxdx13_EdS, PL_cc, TL_x \n')
 
 #===============================
 # LINEAR PART
@@ -69,12 +69,15 @@ def training_int(vars,kev):
     g_k=nk.g_an(-2*np.log(kev/kref));h_k=nk.h_an(-2*np.log(kev/kref))
 
     P13dcdc=6*q*q*(nk.F3_0(kev,q,mu))*PLc_int(q)*PLc_int(kev)
-    P13dcTc=3*q*q*(nk.F3_0(kev,q,mu)+ nk.G3_0(kev,q,mu))*nk.g_c_int(-2*np.log(kev/kref))*PLc_int(q)*PLc_int(kev)
+    # P13dcTc=3*q*q*(nk.F3_0(kev,q,mu)+ nk.G3_0(kev,q,mu))*nk.g_c_int(-2*np.log(kev/kref))*PLc_int(q)*PLc_int(kev)
+    P13dcTc=6*q*q*nk.g_c_int(-2*np.log(kev/kref))*nk.F3_0(kev,q,mu)*PLc_int(q)*PLc_int(kev)
     P13dcdx=6*q*q*g_k*(nk.F3_0(kev,q,mu))*PLc_int(q)*PLc_int(kev)
-    P13dcTx=3*q*q*h_k*(nk.F3_0(kev,q,mu) + nk.G3_0(kev,q,mu))*PLc_int(q)*PLc_int(kev)
+    # P13dcTx=3*q*q*h_k*(nk.F3_0(kev,q,mu) + nk.G3_0(kev,q,mu))*PLc_int(q)*PLc_int(kev)
+    P13dcTx=6*q*q*h_k*nk.F3_0(kev,q,mu)*PLc_int(q)*PLc_int(kev)
+    P13dxdx=6*q*q*g_k*g_k*(nk.F3_0(kev,q,mu))*PLc_int(q)*PLc_int(kev)
 
     intf=4*q*np.pi/fact
-    return [intf*P13dcdc,intf*P13dcTc,intf*P13dcdx,intf*P13dcTx]
+    return [intf*P13dcdc,intf*P13dcTc,intf*P13dcdx,intf*P13dcTx,intf*P13dxdx]
 
 def Pnum_int(vars, kev):
     logq=vars[0]
@@ -87,10 +90,11 @@ def Pnum_int(vars, kev):
     P13dcTc=3*q*q*(F3_cval*nk.g_c_int(-2*np.log(kev/kref))+G3_cval)*PLc_int(q)*PLc_int(kev)
     P13dcdx=3*q*q*(nk.F3_0(kev,q,mu)*g_k+F3_xval)*PLc_int(q)*PLc_int(kev)
     P13dcTx=3*q*q*(nk.F3_0(kev,q,mu)*nk.h_an(-2*np.log(kev/kref))+G3_xval)*PLc_int(q)*PLc_int(kev)
+    P13dxdx=6*q*q*(F3_xval)*PLc_int(q)*PLc_int(kev)
 
     # The additional q below is due to logarithmic integration
     intf=4*q*np.pi/fact
-    return [intf*P13dcdc,intf*P13dcTc,intf*P13dcdx,intf*P13dcTx]
+    return [intf*P13dcdc,intf*P13dcTc,intf*P13dcdx,intf*P13dcTx,intf*P13dxdx]
 
 #--------
 # Integrate
@@ -98,12 +102,12 @@ def Pnum_int(vars, kev):
 print('Starting integral')
 for kEval in kevList:
     integ = vegas.Integrator([[np.log(1.e-3), np.log(1.)], [0., 1.]],mpi=True, nproc=70)
-    traindcdc13,traindcTc13,traindcdx13,traindcTx13 = integ(functools.partial(training_int, kev=kEval),neval=10000)
+    traindcdc13,traindcTc13,traindcdx13,traindcTx13,traindxdx13 = integ(functools.partial(training_int, kev=kEval),neval=10000)
     start_time = time.time()
     result = integ(functools.partial(Pnum_int, kev=kEval), neval=args.neval)
-    resdcdc13, resdcTc13, resdcdx13, resdcTx13 = result
+    resdcdc13, resdcTc13, resdcdx13, resdcTx13, resdxdx13= result
 
     print(f'At k={kEval:.3f} done (took {int((time.time()-start_time)//60)}m {(time.time()-start_time)%60:.0f}s)', flush=True)
 
-    if not args.nosave: open(outfile, 'a').write(f'{kEval:.5g} {resdcdc13.mean:.5g} {traindcdc13.mean:.5g} {resdcTc13.mean:.5g} {traindcTc13.mean:.5g} {resdcdx13.mean:.5g} {traindcdx13.mean:.5g} {resdcTx13.mean:.5g} {traindcTx13.mean:.5g} {PLc_int(kEval):.5g} {nk.g_an(-2*np.log(kEval/kref)):.5g}\n')
+    if not args.nosave: open(outfile, 'a').write(f'{kEval:.5g} {resdcdc13.mean:.5g} {traindcdc13.mean:.5g} {resdcTc13.mean:.5g} {traindcTc13.mean:.5g} {resdcdx13.mean:.5g} {traindcdx13.mean:.5g} {resdcTx13.mean:.5g} {traindcTx13.mean:.5g} {resdxdx13.mean:.5g} {traindxdx13.mean:.5g} {PLc_int(kEval):.5g} {nk.g_an(-2*np.log(kEval/kref)):.5g}\n')
 

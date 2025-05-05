@@ -1,0 +1,3 @@
+Using fx=1.0e-01, ma=1e-27, rtol=1.0e-04 and neval=5000
+Starting integral
+slurmstepd: error: *** JOB 14336 ON eos CANCELLED AT 2025-05-05T09:53:15 ***
