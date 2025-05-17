@@ -6,7 +6,7 @@ from classy import Class
 from scipy.optimize import brentq
 
 class NumKernels:
-    def __init__(self, fx, kref, fullt, supprshift=5, idx_eta=0, rtol=1.e-2):
+    def __init__(self, fx, kref, fullt, supprshift=5, idx_eta=0, rtol=1.e-2, p=0):
         """
         Initialize the NumKernels class.
 
@@ -20,6 +20,7 @@ class NumKernels:
         self.supprshift = supprshift
         self.rtol = rtol 
         self.idx_eta = np.abs(self.fullt - (0.)).argmin()
+        self.p=p
 
         # this is solved fot k=1 and then I shift it y using the smmetry
         def lin_system(w,t):
@@ -33,11 +34,8 @@ class NumKernels:
         w0 = [1,1-3/5*fx,0.,0.]
         linsol = odeint(lin_system, w0, tlin)
         self.g_c_int=interp1d(tlin,linsol[:,1]/linsol[:, 0],bounds_error=False, fill_value=(5/4*np.sqrt(1-24/25*fx)-1/4,1))
-    # Instead solving the linear system numerically I am using analytical formulas
-    # def g_c_int(self,t):
-    #     # This is just a phenomenological interpolation
-    #     y = np.exp(-0.5*t)
-    #     return 1-0.0614945/(1+0.386853/(y**1.69657))
+        self.g_num=interp1d(tlin,linsol[:,2]/linsol[:, 0],bounds_error=False, fill_value=(0.,1))
+        self.h_num=interp1d(tlin,linsol[:,3]/linsol[:, 0],bounds_error=False, fill_value=(0.,1))
    
     def g_an(self,t):
         return  1 + 6 * np.exp(-t) * np.cos(np.sqrt(6) * np.exp(-t / 2)) * sici(np.sqrt(6) * np.exp(-t / 2))[1] - 3 * np.exp(-t) * np.pi * np.sin(np.sqrt(6) * np.exp(-t / 2)) + 6 * np.exp(-t) * np.sin(np.sqrt(6) * np.exp(-t / 2)) * sici(np.sqrt(6) * np.exp(-t / 2))[0]
@@ -77,14 +75,15 @@ class NumKernels:
         k1 , k2, cT = triplet
         kref = self.kref
         fx=self.fx
+        p=self.p
         Fc2_0=(5./7.+6/245*fx)*self.alphas(k1,k2,cT)+(2./7.-6/245*fx)*self.beta(k1,k2,cT)
         Gc2_0=(3./7-51/245*fx)*self.alphas(k1,k2,cT)+(4./7-96/245*fx)*self.beta(k1,k2,cT)
 
         def F2_system(w, t):
             Fc2,Gc2,Fx2,Gx2 = w
-            g_c_k1=self.g_c_int(t-2*np.log(k1/kref)); g_c_k2=self.g_c_int(t-2*np.log(k2/kref))
-            g_k1=self.g_an(t-2*np.log(k1/kref)); g_k2=self.g_an(t-2*np.log(k2/kref))
-            h_k1=self.h_an(t-2*np.log(k1/kref)); h_k2=self.h_an(t-2*np.log(k2/kref))
+            g_c_k1=self.g_c_int(t-(2+p)*np.log(k1/kref)); g_c_k2=self.g_c_int(t-(2+p)*np.log(k2/kref))
+            g_k1=self.g_num(t-(2+p)*np.log(k1/kref)); g_k2=self.g_num(t-(2+p)*np.log(k2/kref))
+            h_k1=self.h_num(t-(2+p)*np.log(k1/kref)); h_k2=self.h_num(t-(2+p)*np.log(k2/kref))
                                                             
             SF2=0.5*g_c_k1*self.alpha(k1,k2,cT)+0.5*g_c_k2*self.alpha(k2,k1,cT)
             dFc2dt = -(g_c_k1+g_c_k2)*Fc2 + Gc2 + SF2
@@ -92,7 +91,7 @@ class NumKernels:
 
             SF2=0.5*g_k2*h_k1*self.alpha(k1,k2,cT)+0.5*g_k1*h_k2*self.alpha(k2,k1,cT)
             dFx2dt = -(g_c_k1+g_c_k2)*Fx2 + Gx2 + SF2
-            dGx2dt = -(0.5+g_c_k1+g_c_k2)*Gx2 + 1.5 *((1-fx)*Fc2+(fx-(k1**2+k2**2+2*k1*k2*cT)/(kref**2)*np.exp(-t))*Fx2) + h_k1*h_k2*self.beta(k1,k2,cT) -(k1**2+k2**2+2*k1*k2*cT)/(kref**2)*np.exp(-t-self.supprshift)*dFx2dt
+            dGx2dt = -(0.5+g_c_k1+g_c_k2)*Gx2 + 1.5 *((1-fx)*Fc2+(fx-(k1**2+k2**2+2*k1*k2*cT)**(0.5*p+1)/(kref**(2+p))*np.exp(-t))*Fx2) + h_k1*h_k2*self.beta(k1,k2,cT) -(k1**2+k2**2+2*k1*k2*cT)**(0.5*p+1)/(kref**(2+p))*np.exp(-t-self.supprshift)*dFx2dt
             return [dFc2dt, dGc2dt,dFx2dt, dGx2dt]
 
         sol = odeint(F2_system, [Fc2_0,Gc2_0,0.,0.], self.fullt, rtol=self.rtol)
@@ -108,6 +107,7 @@ class NumKernels:
         k , q, mu = triplet
         kref = self.kref
         fx=self.fx     
+        p=self.p
 
         ker2_k_mq_full=self.solve_F2([k,q,-mu], return_timedep=True)
         ker2_k_q_full=self.solve_F2([k,q,mu], return_timedep=True)
@@ -125,8 +125,8 @@ class NumKernels:
         def F3_system(w, t):
 
             Fc3,Gc3,Fx3,Gx3 = w
-            g_c_k=self.g_c_int(t-2*np.log(k/kref));g_c_q=self.g_c_int(t-2*np.log(q/kref))
-            g_q=self.g_an(t-2*np.log(q/kref)); h_q=self.h_an(t-2*np.log(q/kref))
+            g_c_k=self.g_c_int(t-(2+p)*np.log(k/kref));g_c_q=self.g_c_int(t-(2+p)*np.log(q/kref))
+            g_q=self.g_num(t-(2+p)*np.log(q/kref)); h_q=self.h_num(t-(2+p)*np.log(q/kref))
             fact=(g_c_k+2*g_c_q)
 
             idx_t_F3=np.abs(self.fullt - t).argmin()
@@ -151,7 +151,7 @@ class NumKernels:
             SG3x+=h_q*b_q_kPq*2*ker2_k_q[3]
 
             dFx3dt = -fact*Fx3 + Gx3 + SF3x/3
-            dGx3dt = -(0.5+fact)*Gx3 + 1.5*((1-fx)*Fc3+(fx-(k**2)/(kref**2)*np.exp(-t))*Fx3) + SG3x/3 -(k**2)/(kref**2)*np.exp(-t-self.supprshift)*dFx3dt
+            dGx3dt = -(0.5+fact)*Gx3 + 1.5*((1-fx)*Fc3+(fx-(k**(2+p))/(kref**(2+p))*np.exp(-t))*Fx3) + SG3x/3 -(k**2)/(kref**2)*np.exp(-t-self.supprshift)*dFx3dt
 
             return [dFc3dt, dGc3dt,dFx3dt, dGx3dt]
         tsol = self.fullt[:self.idx_eta+2]
@@ -170,7 +170,7 @@ class PLaxfromClass:
         'YHe':0.25,
         'perturbations_verbose':0,
         'background_verbose':0,
-        'output':'mPk',
+        'output':'mPk,mTk, vTk',
         'P_k_max_1/Mpc':100,
         'z_max_pk':5,
         'format':'class',
@@ -217,3 +217,56 @@ class PLaxfromClass:
             Pk_a.append(axCDM.pk_lin(k*h,zeval)*h**3)
         Pk_a=np.array(Pk_a)
         self.PLc_int=interp1d(kk,Pk_a,fill_value='extrapolate')
+
+        ax_tk_k = axCDM.get_transfer(z=zeval)
+        f_b=0.0223828/(0.12+0.0223828)
+        d_cb_k=(1-f_b)*ax_tk_k['d_cdm']+f_b*ax_tk_k['d_b']
+        self.g_class=interp1d(ax_tk_k['k (h/Mpc)'],ax_tk_k['d_scf']/d_cb_k,fill_value='extrapolate')
+
+class PLnufromClass:
+    def __init__(self, fx, Mnu, zeval):
+        h= 0.67810
+        common_settings = {
+        'h':h,
+        'z_reio':7.6711,
+        'YHe':0.25,
+        'perturbations_verbose':0,
+        'background_verbose':0,
+        'output':'mPk,mTk, vTk',
+        'P_k_max_1/Mpc':100,
+        'z_max_pk':5,
+        'format':'class',
+        'N_ur': 3.046,
+        'h':0.67810,'z_reio':7.6711,'YHe':0.25,'omega_b':0.022,
+        }
+
+        nuCDM = Class()
+        nuCDM.set(common_settings)
+        # Fix omega_m = 0.142
+        omega_nu = Mnu/93.14
+        omega_c = 0.142-0.022-omega_nu
+
+        nuCDM.set({
+            'omega_cdm':omega_c,
+            'N_ur': 2.0328,
+            # 'N_ncdm':1,
+            # 'm_ncdm':Mnu,
+            'N_ur': 0.0328,
+            'N_ncdm':3,
+            'm_ncdm':f'{Mnu/3},{Mnu/3},{Mnu/3}',
+            'ncdm_fluid_approximation':2,
+        })
+
+        nuCDM.compute()
+
+        kk = np.logspace(-5.,2.,500) # k in h/Mpc
+        Pk_a = []
+        for k in kk:
+            Pk_a.append(nuCDM.pk_lin(k*h,zeval)*h**3)
+        Pk_a=np.array(Pk_a)
+        self.PLc_int=interp1d(kk,Pk_a,fill_value='extrapolate')
+
+        ax_tk_k = nuCDM.get_transfer(z=zeval)
+        f_b=0.0223828/(0.12+0.0223828)
+        d_cb_k=(1-f_b)*ax_tk_k['d_cdm']+f_b*ax_tk_k['d_b']
+        self.g_class=interp1d(ax_tk_k['k (h/Mpc)'],ax_tk_k['d_ncdm[0]']/d_cb_k,fill_value='extrapolate')
