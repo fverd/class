@@ -6,7 +6,7 @@ from classy import Class
 from scipy.optimize import brentq
 
 class NumKernels:
-    def __init__(self, fx, kref, fullt, supprshift=5, idx_eta=0, rtol=1.e-2, p=0):
+    def __init__(self, fx, kref, fullt, supprshift=5, idx_eta=0, rtol=1.e-2, p=0, g_class_k=None):
         """
         Initialize the NumKernels class.
 
@@ -34,9 +34,18 @@ class NumKernels:
         w0 = [1,1-3/5*fx,0.,0.]
         linsol = odeint(lin_system, w0, tlin)
         self.g_c_int=interp1d(tlin,linsol[:,1]/linsol[:, 0],bounds_error=False, fill_value=(5/4*np.sqrt(1-24/25*fx)-1/4,1))
-        self.g_num=interp1d(tlin,linsol[:,2]/linsol[:, 0],bounds_error=False, fill_value=(0.,1))
-        self.h_num=interp1d(tlin,linsol[:,3]/linsol[:, 0],bounds_error=False, fill_value=(0.,1))
-   
+        
+        if g_class_k==None:
+            self.g_num=interp1d(tlin,linsol[:,2]/linsol[:, 0],bounds_error=False, fill_value=(0.,1))
+            self.h_num=interp1d(tlin,linsol[:,3]/linsol[:, 0],bounds_error=False, fill_value=(0.,1))
+        else: 
+            print('Using CLASS transfer function as g')
+            g_class_t_vals = g_class_k(kref*np.exp(-tlin/(2+p)))
+            self.g_num=interp1d(tlin,g_class_t_vals,bounds_error=False, fill_value=(0.,1))
+            h_rescale = g_class_t_vals[1:]/(linsol[1:,2]/linsol[1:, 0])
+            self.h_num=interp1d(tlin[1:],linsol[1:,3]/linsol[1:, 0]*h_rescale,bounds_error=False, fill_value=(0.,1))
+
+
     def g_an(self,t):
         return  1 + 6 * np.exp(-t) * np.cos(np.sqrt(6) * np.exp(-t / 2)) * sici(np.sqrt(6) * np.exp(-t / 2))[1] - 3 * np.exp(-t) * np.pi * np.sin(np.sqrt(6) * np.exp(-t / 2)) + 6 * np.exp(-t) * np.sin(np.sqrt(6) * np.exp(-t / 2)) * sici(np.sqrt(6) * np.exp(-t / 2))[0]
     def h_an(self,t):
@@ -175,18 +184,26 @@ class PLaxfromClass:
         'z_max_pk':5,
         'format':'class',
         'N_ur': 3.046,
-        'h':0.67810,'z_reio':7.6711,'YHe':0.25,'omega_b':0.022,
+        'h':0.67810,'z_reio':7.6711,'YHe':0.25,'omega_b':0.02238,
         }
 
         axCDM = Class()
         axCDM.set(common_settings)
-        # Fix omega_m = 0.142
         _H0_ = 3.336e-04 * h
         _ev_to_HO_ = 1.56e29 / _H0_
-        omega_a = fx * 0.142
+
+        # Fix omega_m = 0.142 ------
+        # omega_a = fx * 0.142
+        # axCDM.set({
+        #     'omega_cdm':(1-fx)*0.142-0.02238,
+        #     'Omega_scf':omega_a/h/h,
+        #     'm_axion': m_a_ev * _ev_to_HO_
+        #     })
+
+        # Fix omega_c = 0.12 ------
         axCDM.set({
-            'omega_cdm':(1-fx)*0.142-0.022,
-            'Omega_scf':omega_a/h/h,
+            'omega_cdm':0.12,
+            'Omega_scf':((fx/(1-fx))*(0.12+0.02238))/h/h,
             'm_axion': m_a_ev * _ev_to_HO_
             })
 
@@ -237,25 +254,36 @@ class PLnufromClass:
         'z_max_pk':5,
         'format':'class',
         'N_ur': 3.046,
-        'h':0.67810,'z_reio':7.6711,'YHe':0.25,'omega_b':0.022,
+        'h':0.67810,'z_reio':7.6711,'YHe':0.25,'omega_b':0.02238,
         }
 
         nuCDM = Class()
         nuCDM.set(common_settings)
         # Fix omega_m = 0.142
         omega_nu = Mnu/93.14
-        omega_c = 0.142-0.022-omega_nu
+        omega_c = 0.142-0.02238-omega_nu
 
+        # Fix omega_m = 0.12
+        # omega_nu = Mnu/93.14
+        # omega_c = 0.12
+
+        # one neutrino
         nuCDM.set({
             'omega_cdm':omega_c,
             'N_ur': 2.0328,
-            # 'N_ncdm':1,
-            # 'm_ncdm':Mnu,
-            'N_ur': 0.0328,
-            'N_ncdm':3,
-            'm_ncdm':f'{Mnu/3},{Mnu/3},{Mnu/3}',
-            'ncdm_fluid_approximation':2,
+            'N_ncdm':1,
+            'm_ncdm':Mnu,
+            'ncdm_fluid_approximation':0,
         })
+
+        # three degenerate neutrinos
+        # nuCDM.set({
+        #     'omega_cdm':omega_c,
+        #     'N_ur': 0.0328,
+        #     'N_ncdm':3,
+        #     'm_ncdm':f'{Mnu/3},{Mnu/3},{Mnu/3}',
+        #     'ncdm_fluid_approximation':0,
+        # })
 
         nuCDM.compute()
 

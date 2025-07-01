@@ -4,7 +4,7 @@ import functools
 import argparse
 import vegas
 sys.path.append('/home/fverdian/class/soundspeed-scripts/numerical-integrals')
-from num_kernels import NumKernels, PLaxfromClass
+from num_kernels import NumKernels, PLnufromClass
 
 parser = argparse.ArgumentParser(description="Compute P1-loop with fx component")
 
@@ -15,40 +15,39 @@ parser = argparse.ArgumentParser(description="Compute P1-loop with fx component"
 #===============================
 
 # physical
-fx=0.1
-ma=1.e-27
+Mnu=0.3
 zeval=0.5
 
-p=2
-
-# kevList=np.logspace(np.log10(0.05),np.log10(0.5),30)
+# kevList=np.logspace(np.log10(0.45),np.log10(10),30)
 kevList=np.logspace(np.log10(0.05),np.log10(0.6),60)
-
-# kevList = [0.44011]
+# kevList=[0.19696]
 
 # technical
-fullt=np.linspace(-6,1, 200)
+fullt=np.linspace(-5,1, 200)
 idx_eta=np.abs(fullt - (0.)).argmin()
 rtol=0.1
 supprshift=5
 fact=(2*np.pi)**3
 
 parser.add_argument('-rtol', dest='rtol', type=float, default=rtol, help='Relative tolerance for ODE integration')
-parser.add_argument('-fx', dest='fx', type=float, default=fx , help='Chi fraction')
-parser.add_argument('-ma', dest='ma', type=float, default=ma , help='Axion mass')
-parser.add_argument('-p', '--p', type=int, default=2)
+parser.add_argument('-Mnu', dest='Mnu', type=float, default=Mnu , help='Neutrino mass')
+parser.add_argument('-p', '--p', type=int, default=0)
 parser.add_argument('-N', dest='neval', type=int, default=1000, help='vegas N evaluations')
 parser.add_argument('-v', '--verbose', action='store_true')
 parser.add_argument('--nosave', action='store_true')
 args = parser.parse_args()
-fx=args.fx;rtol=args.rtol;ma=args.ma;p=args.p
-print(f'Using fx={fx:.1e}, ma={ma}, rtol={rtol:.1e} and neval={args.neval}')
+rtol=args.rtol;Mnu=args.Mnu;p=args.p
+
+fx=Mnu/93.14/0.142
+print(f'Using Mnu={Mnu}, rtol={rtol:.1e} and neval={args.neval}. The fraction is {fx}')
 
 h=0.67810
-kref =8.4e12 * pow(ma/h,1/2) * 0.666**0.25
+mnu = Mnu
+# mnu = Mnu/3
+kref = np.sqrt(5/9)* 5.e-2 * (mnu/0.1) * pow(0.666,1/2)* np.sqrt(0.142/h/h/0.3)
 
 if not args.nosave:
-    outfile='/home/fverdian/class/soundspeed-scripts/numerical-integrals/results/P13-ma'+str(-np.log10(ma)).replace('.','p')+'-fx'+str(fx).replace('.','p')+'-N'+str(args.neval)+'-p'+str(p)+'.txt'
+    outfile='/home/fverdian/class/soundspeed-scripts/numerical-integrals/neutrinos/P13-Mnu'+str(Mnu).replace('.','p')+'-N'+str(args.neval)+'-p'+str(p)+'.txt'
     if os.path.exists(outfile):
         os.remove(outfile)
     open(outfile, 'a').write(f'# k, dcdc13, dcdc13_EdS, dcTc13, dcTc13_EdS, dcdx13, dcdx13_EdS, dcTx13, dcTx13_EdS, dxdx13, dxdx13_EdS, PL_cc, TL_x, dcdx13_IR \n')
@@ -57,7 +56,7 @@ if not args.nosave:
 # LINEAR PART
 #===============================
 
-plclass = PLaxfromClass(fx=fx, m_a_ev=ma, zeval=zeval)
+plclass = PLnufromClass(fx=fx, Mnu=Mnu, zeval=zeval)
 PLc_int = plclass.PLc_int
 nk = NumKernels(fx=fx, kref=kref, fullt=fullt, rtol=rtol, p=p, g_class_k=plclass.g_class)
 
@@ -111,12 +110,12 @@ def Pnum_int(vars, kev):
 print('Starting integral')
 for kEval in kevList:
     integ = vegas.Integrator([[np.log(1.e-3), np.log(5.)], [0., 1.]],mpi=True, nproc=70)
-    traindcdc13,traindcTc13,traindcdx13,traindcTx13,traindxdx13,traindcdx13_IR = integ(functools.partial(training_int, kev=kEval),neval=40000)
+    traindcdc13,traindcTc13,traindcdx13,traindcTx13,traindxdx13,traindcdx13_IR = integ(functools.partial(training_int, kev=kEval),neval=10000)
     start_time = time.time()
     result = integ(functools.partial(Pnum_int, kev=kEval), neval=args.neval)
     resdcdc13, resdcTc13, resdcdx13, resdcTx13, resdxdx13= result
 
-    print(f'At k={kEval:.3f} done (took {int((time.time()-start_time)//60)}m {(time.time()-start_time)%60:.0f}s). Val dcdx: num {resdcdx13} EdS {traindcdx13}', flush=True)
-    print(f'num {resdcdx13.mean:.5g}, num {traindcdx13.mean:.5g}')
+    print(f'At k={kEval:.3f} done (took {int((time.time()-start_time)//60)}m {(time.time()-start_time)%60:.0f}s)', flush=True)
+    print(f'num {resdcdc13}, EdS {traindcdc13}')
     if not args.nosave: open(outfile, 'a').write(f'{kEval:.5g} {resdcdc13.mean:.5g} {traindcdc13.mean:.5g} {resdcTc13.mean:.5g} {traindcTc13.mean:.5g} {resdcdx13.mean:.5g} {traindcdx13.mean:.5g} {resdcTx13.mean:.5g} {traindcTx13.mean:.5g} {resdxdx13.mean:.5g} {traindxdx13.mean:.5g} {PLc_int(kEval):.5g} {nk.g_num(-(2+p)*np.log(kEval/kref)):.5g} {traindcdx13_IR.mean:.5g}\n')
 
