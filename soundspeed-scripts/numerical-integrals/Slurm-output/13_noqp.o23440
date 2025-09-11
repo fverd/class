@@ -1,0 +1,9 @@
+Using fx=1.0e-01, ma=1e-27, rtol=1.0e-02 and neval=5000
+Using CLASS transfer function as g
+Starting integral
+At k=0.020 done (took 5m 27s). Val dcdx: num -46.851(30) EdS -48.3323(49)
+num -46.851, num -48.332
+At k=0.030 done (took 4m 17s). Val dcdx: num -91.791(52) EdS -95.5094(86)
+num -91.791, num -95.509
+At k=0.040 done (took 4m 4s). Val dcdx: num -129.094(62) EdS -134.758(11)
+num -129.09, num -134.76

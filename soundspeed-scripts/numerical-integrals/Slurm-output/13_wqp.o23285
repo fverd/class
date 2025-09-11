@@ -1,0 +1,123 @@
+Using fx=1.0e-01, ma=1e-25, rtol=1.0e-02 and neval=5000
+Using CLASS transfer function as g
+Starting integral
+At k=0.050 done (took 4m 6s). Val dcdx: num -266.91(15) EdS -262.359(21)
+num -266.91, num -262.36
+At k=0.052 done (took 4m 11s). Val dcdx: num -282.57(16) EdS -278.175(22)
+num -282.57, num -278.17
+At k=0.054 done (took 4m 2s). Val dcdx: num -299.97(16) EdS -295.600(24)
+num -299.97, num -295.6
+At k=0.057 done (took 4m 2s). Val dcdx: num -318.85(17) EdS -314.557(25)
+num -318.85, num -314.56
+At k=0.059 done (took 3m 36s). Val dcdx: num -339.19(17) EdS -334.980(26)
+num -339.19, num -334.98
+At k=0.062 done (took 3m 31s). Val dcdx: num -361.03(18) EdS -356.903(27)
+num -361.03, num -356.9
+At k=0.064 done (took 3m 32s). Val dcdx: num -383.95(19) EdS -379.979(29)
+num -383.95, num -379.98
+At k=0.067 done (took 3m 30s). Val dcdx: num -407.56(19) EdS -403.772(30)
+num -407.56, num -403.77
+At k=0.070 done (took 3m 31s). Val dcdx: num -431.73(20) EdS -427.722(32)
+num -431.73, num -427.72
+At k=0.073 done (took 3m 27s). Val dcdx: num -454.92(21) EdS -451.094(32)
+num -454.92, num -451.09
+At k=0.076 done (took 3m 31s). Val dcdx: num -475.89(22) EdS -472.984(33)
+num -475.89, num -472.98
+At k=0.079 done (took 3m 28s). Val dcdx: num -495.83(22) EdS -492.867(35)
+num -495.83, num -492.87
+At k=0.083 done (took 3m 21s). Val dcdx: num -512.49(22) EdS -509.827(35)
+num -512.49, num -509.83
+At k=0.086 done (took 3m 26s). Val dcdx: num -526.45(23) EdS -524.084(36)
+num -526.45, num -524.08
+At k=0.090 done (took 3m 25s). Val dcdx: num -538.12(22) EdS -535.867(36)
+num -538.12, num -535.87
+At k=0.094 done (took 3m 28s). Val dcdx: num -548.49(23) EdS -546.287(37)
+num -548.49, num -546.29
+At k=0.098 done (took 3m 21s). Val dcdx: num -559.49(23) EdS -556.906(37)
+num -559.49, num -556.91
+At k=0.102 done (took 3m 26s). Val dcdx: num -570.70(23) EdS -569.093(37)
+num -570.7, num -569.09
+At k=0.107 done (took 3m 24s). Val dcdx: num -587.23(23) EdS -585.528(37)
+num -587.23, num -585.53
+At k=0.111 done (took 3m 26s). Val dcdx: num -609.18(24) EdS -607.585(38)
+num -609.18, num -607.59
+At k=0.116 done (took 3m 25s). Val dcdx: num -636.69(24) EdS -635.274(39)
+num -636.69, num -635.27
+At k=0.121 done (took 3m 25s). Val dcdx: num -669.30(25) EdS -668.301(41)
+num -669.3, num -668.3
+At k=0.126 done (took 3m 28s). Val dcdx: num -705.49(26) EdS -703.907(42)
+num -705.49, num -703.91
+At k=0.132 done (took 3m 30s). Val dcdx: num -738.92(27) EdS -738.019(44)
+num -738.92, num -738.02
+At k=0.137 done (took 3m 25s). Val dcdx: num -767.46(28) EdS -766.413(45)
+num -767.46, num -766.41
+At k=0.143 done (took 3m 18s). Val dcdx: num -785.81(28) EdS -784.649(46)
+num -785.81, num -784.65
+At k=0.149 done (took 3m 23s). Val dcdx: num -794.67(28) EdS -793.247(46)
+num -794.67, num -793.25
+At k=0.156 done (took 3m 28s). Val dcdx: num -795.62(28) EdS -794.821(45)
+num -795.62, num -794.82
+At k=0.163 done (took 3m 28s). Val dcdx: num -797.61(27) EdS -796.742(44)
+num -797.61, num -796.74
+At k=0.170 done (took 3m 27s). Val dcdx: num -806.11(27) EdS -805.842(44)
+num -806.11, num -805.84
+At k=0.177 done (took 3m 29s). Val dcdx: num -825.97(28) EdS -825.326(45)
+num -825.97, num -825.33
+At k=0.185 done (took 3m 28s). Val dcdx: num -855.98(28) EdS -855.629(46)
+num -855.98, num -855.63
+At k=0.192 done (took 3m 25s). Val dcdx: num -890.10(29) EdS -889.774(47)
+num -890.1, num -889.77
+At k=0.201 done (took 3m 27s). Val dcdx: num -917.18(30) EdS -916.731(49)
+num -917.18, num -916.73
+At k=0.209 done (took 3m 24s). Val dcdx: num -928.93(30) EdS -928.476(49)
+num -928.93, num -928.48
+At k=0.218 done (took 3m 31s). Val dcdx: num -926.37(29) EdS -926.006(48)
+num -926.37, num -926.01
+At k=0.228 done (took 3m 26s). Val dcdx: num -920.04(29) EdS -920.170(47)
+num -920.04, num -920.17
+At k=0.238 done (took 3m 24s). Val dcdx: num -920.61(29) EdS -921.005(48)
+num -920.61, num -921.01
+At k=0.248 done (took 3m 20s). Val dcdx: num -935.66(29) EdS -935.924(47)
+num -935.66, num -935.92
+At k=0.258 done (took 3m 22s). Val dcdx: num -956.21(29) EdS -955.640(48)
+num -956.21, num -955.64
+At k=0.270 done (took 3m 19s). Val dcdx: num -966.68(29) EdS -966.705(48)
+num -966.68, num -966.71
+At k=0.281 done (took 3m 21s). Val dcdx: num -961.18(28) EdS -961.696(47)
+num -961.18, num -961.7
+At k=0.293 done (took 3m 18s). Val dcdx: num -947.85(28) EdS -948.118(46)
+num -947.85, num -948.12
+At k=0.306 done (took 3m 24s). Val dcdx: num -938.57(28) EdS -938.816(45)
+num -938.57, num -938.82
+At k=0.319 done (took 3m 18s). Val dcdx: num -937.54(27) EdS -937.630(45)
+num -937.54, num -937.63
+At k=0.333 done (took 3m 21s). Val dcdx: num -934.72(27) EdS -935.502(44)
+num -934.72, num -935.5
+At k=0.347 done (took 3m 17s). Val dcdx: num -920.72(26) EdS -921.307(43)
+num -920.72, num -921.31
+At k=0.362 done (took 3m 20s). Val dcdx: num -898.35(25) EdS -898.981(42)
+num -898.35, num -898.98
+At k=0.378 done (took 3m 19s). Val dcdx: num -881.76(25) EdS -881.691(40)
+num -881.76, num -881.69
+At k=0.394 done (took 3m 23s). Val dcdx: num -867.30(24) EdS -867.261(40)
+num -867.3, num -867.26
+At k=0.411 done (took 3m 21s). Val dcdx: num -847.78(23) EdS -848.147(38)
+num -847.78, num -848.15
+At k=0.428 done (took 3m 21s). Val dcdx: num -824.96(22) EdS -825.366(37)
+num -824.96, num -825.37
+At k=0.447 done (took 3m 24s). Val dcdx: num -805.11(22) EdS -805.666(36)
+num -805.11, num -805.67
+At k=0.466 done (took 3m 17s). Val dcdx: num -788.37(21) EdS -788.748(35)
+num -788.37, num -788.75
+At k=0.486 done (took 3m 22s). Val dcdx: num -771.45(21) EdS -771.469(34)
+num -771.45, num -771.47
+At k=0.507 done (took 3m 22s). Val dcdx: num -755.64(20) EdS -755.974(33)
+num -755.64, num -755.97
+At k=0.529 done (took 3m 17s). Val dcdx: num -742.62(20) EdS -742.735(32)
+num -742.62, num -742.73
+At k=0.552 done (took 3m 16s). Val dcdx: num -729.19(19) EdS -729.119(32)
+num -729.19, num -729.12
+At k=0.575 done (took 3m 11s). Val dcdx: num -715.85(19) EdS -715.812(31)
+num -715.85, num -715.81
+At k=0.600 done (took 3m 12s). Val dcdx: num -701.22(18) EdS -700.956(30)
+num -701.22, num -700.96
