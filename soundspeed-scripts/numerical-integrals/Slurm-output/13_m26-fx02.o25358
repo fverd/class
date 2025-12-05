@@ -1,0 +1,25 @@
+Using fx=2.0e-01, ma=1e-26, rtol=1.0e-02 and neval=5000
+Using CLASS transfer function as g
+Starting integral
+At k=0.050 done (took 1m 23s). Val dcdx: num 167.491(99) EdS 167.463(37)
+At k=0.052 done (took 1m 24s). Val dcdx: num 183.52(10) EdS 183.512(37)
+At k=0.054 done (took 1m 24s). Val dcdx: num 200.65(11) EdS 200.769(47)
+At k=0.057 done (took 1m 25s). Val dcdx: num 218.98(12) EdS 219.016(48)
+At k=0.059 done (took 1m 25s). Val dcdx: num 239.04(14) EdS 238.799(53)
+At k=0.062 done (took 1m 26s). Val dcdx: num 259.40(14) EdS 259.532(52)
+At k=0.064 done (took 1m 26s). Val dcdx: num 281.56(15) EdS 281.745(55)
+At k=0.067 done (took 1m 26s). Val dcdx: num 305.23(17) EdS 305.122(62)
+At k=0.070 done (took 1m 26s). Val dcdx: num 329.99(17) EdS 330.142(66)
+At k=0.073 done (took 1m 26s). Val dcdx: num 356.29(19) EdS 356.335(76)
+At k=0.076 done (took 1m 27s). Val dcdx: num 383.48(20) EdS 383.683(79)
+At k=0.079 done (took 1m 27s). Val dcdx: num 412.04(21) EdS 411.997(83)
+At k=0.083 done (took 1m 27s). Val dcdx: num 441.56(23) EdS 441.251(89)
+At k=0.086 done (took 1m 28s). Val dcdx: num 471.51(23) EdS 471.275(99)
+At k=0.090 done (took 1m 28s). Val dcdx: num 501.76(27) EdS 501.45(10)
+At k=0.094 done (took 1m 28s). Val dcdx: num 531.63(27) EdS 531.43(10)
+At k=0.098 done (took 1m 28s). Val dcdx: num 560.81(27) EdS 560.83(13)
+At k=0.102 done (took 1m 29s). Val dcdx: num 588.98(29) EdS 588.74(12)
+At k=0.107 done (took 1m 30s). Val dcdx: num 615.65(31) EdS 615.00(13)
+At k=0.111 done (took 1m 30s). Val dcdx: num 640.70(33) EdS 639.92(13)
+At k=0.116 done (took 1m 31s). Val dcdx: num 663.25(32) EdS 662.56(14)
+slurmstepd: error: *** JOB 25358 ON eos CANCELLED AT 2025-09-14T12:33:08 ***

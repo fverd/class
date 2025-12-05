@@ -20,8 +20,8 @@ ma=1.e-27
 zeval=0.5
 
 # kevList=np.logspace(np.log10(0.05),np.log10(0.5),30)
-kevList=np.logspace(np.log10(0.05),np.log10(0.6),60)
-# kevList = [0.15]
+kevList=np.logspace(np.log10(0.05),np.log10(0.6),30)
+# kevList = np.arange(0.03,0.6,0.02)
 
 # technical
 fullt=np.linspace(-6,1, 200)

@@ -21,9 +21,8 @@ zeval=0.5
 
 p=2
 
-# kevList=np.logspace(np.log10(0.05),np.log10(0.5),30)
-kevList=np.logspace(np.log10(0.05),np.log10(0.6),60)
-
+kevList=np.logspace(np.log10(0.05),np.log10(0.6),30)
+# kevList = np.arange(0.03,0.6,0.02)
 # kevList = [0.44011]
 
 # technical

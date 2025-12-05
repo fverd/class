@@ -1,0 +1,24 @@
+Using fx=2.0e-01, ma=1e-26, rtol=1.0e-02 and neval=5000
+Using CLASS transfer function as g
+Starting integral
+At k=0.050 done (took 3m 46s). Val dcdx: num -219.95(11) EdS -217.975(18)
+num -219.95, num -217.97
+At k=0.052 done (took 3m 49s). Val dcdx: num -233.35(12) EdS -231.359(19)
+num -233.35, num -231.36
+At k=0.054 done (took 3m 46s). Val dcdx: num -247.99(12) EdS -245.913(20)
+num -247.99, num -245.91
+At k=0.057 done (took 3m 47s). Val dcdx: num -263.46(13) EdS -261.597(20)
+num -263.46, num -261.6
+At k=0.059 done (took 3m 50s). Val dcdx: num -280.08(13) EdS -278.436(22)
+num -280.08, num -278.44
+At k=0.062 done (took 3m 47s). Val dcdx: num -297.85(14) EdS -296.413(22)
+num -297.85, num -296.41
+At k=0.064 done (took 3m 46s). Val dcdx: num -316.59(15) EdS -315.335(23)
+num -316.59, num -315.33
+At k=0.067 done (took 3m 50s). Val dcdx: num -336.18(15) EdS -334.887(24)
+num -336.18, num -334.89
+At k=0.070 done (took 3m 47s). Val dcdx: num -356.07(16) EdS -354.796(25)
+num -356.07, num -354.8
+At k=0.073 done (took 3m 43s). Val dcdx: num -375.35(16) EdS -374.439(26)
+num -375.35, num -374.44
+slurmstepd: error: *** JOB 25357 ON eos CANCELLED AT 2025-09-14T12:33:08 ***

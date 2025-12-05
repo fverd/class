@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-#SBATCH --job-name=13_noqp
+#SBATCH --job-name=13_m26_again
 
 #SBATCH --mail-type=END
 #SBATCH --mail-user=fverdian@sissa.it
@@ -16,4 +16,4 @@ export OMP_NUM_THREADS=$((${SLURM_CPUS_PER_TASK}/2))
 
 # python /home/fverdian/class/soundspeed-scripts/numerical-integrals/neutrinos/integrate_13_nu.py -rtol 0.01 -N 16000 -Mnu 1.0 -p 0 
 
-python /home/fverdian/class/soundspeed-scripts/numerical-integrals/quantumpressure/integrate_13_qp.py -rtol 0.01 -N 5000 -fx 0.1 -ma 1.e-27 -p 2
+python /home/fverdian/class/soundspeed-scripts/numerical-integrals/integrate_13.py -rtol 0.01 -N 5000 -fx 0.2 -ma 1.e-26 -p 2

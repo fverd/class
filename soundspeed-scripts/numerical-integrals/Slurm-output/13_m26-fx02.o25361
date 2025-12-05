@@ -1,0 +1,61 @@
+Using fx=2.0e-01, ma=1e-26, rtol=1.0e-02 and neval=5000
+Using CLASS transfer function as g
+Starting integral
+At k=0.030 done (took 2m 2s). Val dcdx: num -107.874(72) EdS -104.278(10)
+num -107.87, num -104.28
+At k=0.050 done (took 1m 59s). Val dcdx: num -220.02(11) EdS -217.914(18)
+num -220.02, num -217.91
+At k=0.070 done (took 1m 57s). Val dcdx: num -355.57(16) EdS -354.622(25)
+num -355.57, num -354.62
+At k=0.090 done (took 1m 58s). Val dcdx: num -444.93(18) EdS -445.300(29)
+num -444.93, num -445.3
+At k=0.110 done (took 1m 58s). Val dcdx: num -464.29(17) EdS -464.891(28)
+num -464.29, num -464.89
+At k=0.130 done (took 1m 57s). Val dcdx: num -491.52(17) EdS -492.607(28)
+num -491.52, num -492.61
+At k=0.150 done (took 1m 58s). Val dcdx: num -473.56(15) EdS -474.712(26)
+num -473.56, num -474.71
+At k=0.170 done (took 1m 57s). Val dcdx: num -408.45(13) EdS -409.965(21)
+num -408.45, num -409.97
+At k=0.190 done (took 1m 55s). Val dcdx: num -386.19(12) EdS -387.607(20)
+num -386.19, num -387.61
+At k=0.210 done (took 1m 55s). Val dcdx: num -384.72(11) EdS -386.362(19)
+num -384.72, num -386.36
+At k=0.230 done (took 1m 50s). Val dcdx: num -352.77(10) EdS -354.134(17)
+num -352.77, num -354.13
+At k=0.250 done (took 1m 53s). Val dcdx: num -325.384(91) EdS -327.015(15)
+num -325.38, num -327.01
+At k=0.270 done (took 1m 57s). Val dcdx: num -314.014(87) EdS -315.854(15)
+num -314.01, num -315.85
+At k=0.290 done (took 1m 58s). Val dcdx: num -293.729(81) EdS -295.587(14)
+num -293.73, num -295.59
+At k=0.310 done (took 1m 60s). Val dcdx: num -268.646(73) EdS -270.600(12)
+num -268.65, num -270.6
+At k=0.330 done (took 2m 0s). Val dcdx: num -253.459(67) EdS -255.625(11)
+num -253.46, num -255.62
+At k=0.350 done (took 2m 4s). Val dcdx: num -239.439(62) EdS -241.588(11)
+num -239.44, num -241.59
+At k=0.370 done (took 2m 6s). Val dcdx: num -221.436(57) EdS -223.6528(99)
+num -221.44, num -223.65
+At k=0.390 done (took 2m 12s). Val dcdx: num -206.285(53) EdS -208.4882(92)
+num -206.29, num -208.49
+At k=0.410 done (took 2m 17s). Val dcdx: num -194.012(50) EdS -196.2677(85)
+num -194.01, num -196.27
+At k=0.430 done (took 2m 20s). Val dcdx: num -181.265(47) EdS -183.3463(80)
+num -181.27, num -183.35
+At k=0.450 done (took 2m 24s). Val dcdx: num -168.621(45) EdS -170.7834(74)
+num -168.62, num -170.78
+At k=0.470 done (took 2m 30s). Val dcdx: num -157.664(42) EdS -159.7785(69)
+num -157.66, num -159.78
+At k=0.490 done (took 2m 37s). Val dcdx: num -147.655(39) EdS -149.8639(65)
+num -147.66, num -149.86
+At k=0.510 done (took 2m 40s). Val dcdx: num -137.862(37) EdS -139.9757(60)
+num -137.86, num -139.98
+At k=0.530 done (took 2m 41s). Val dcdx: num -128.708(35) EdS -130.8102(55)
+num -128.71, num -130.81
+At k=0.550 done (took 2m 45s). Val dcdx: num -120.367(32) EdS -122.4506(51)
+num -120.37, num -122.45
+At k=0.570 done (took 2m 55s). Val dcdx: num -112.459(30) EdS -114.5368(48)
+num -112.46, num -114.54
+At k=0.590 done (took 3m 2s). Val dcdx: num -105.146(28) EdS -107.1829(45)
+num -105.15, num -107.18
