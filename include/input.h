@@ -211,7 +211,7 @@
  * For shooting method: definition of the possible targets
  */
 
-enum target_names {theta_s, Omega_dcdmdr, omega_dcdmdr,
+enum target_names {theta_s, theta_s_100, Omega_dcdmdr, omega_dcdmdr,
                   Omega_scf, Omega_ini_dcdm, omega_ini_dcdm,
                   fraction_axion_ac, log10_axion_ac, Omega_scf_shoot_fa, log10_fraction_axion_ac_phi2n,
                   log10_axion_ac_phi2n, a_peak_eq, sigma8};

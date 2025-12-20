@@ -527,19 +527,19 @@ int input_shooting(struct file_content * pfc,
   char string1[_ARGUMENT_LENGTH_MAX_];
 
   /* array of parameters passed by the user for which we need shooting (= target parameters) */
-  char * const target_namestrings[] = {"100*theta_s","Omega_dcdmdr","omega_dcdmdr",
+  char * const target_namestrings[] = {"100*theta_s","theta_s_100","Omega_dcdmdr","omega_dcdmdr",
                                        "Omega_scf","Omega_ini_dcdm","omega_ini_dcdm",
                                        "fraction_axion_ac","log10_axion_ac","Omega_scf_shoot_fa","log10_fraction_axion_ac_phi2n",
                                        "log10_axion_ac_phi2n","a_peak_eq","sigma8"};
   /* array of corresponding parameters that must be adjusted in order to meet the target (= unknown parameters) */
-  char * const unknown_namestrings[] = {"h","Omega_ini_dcdm","Omega_ini_dcdm",
+  char * const unknown_namestrings[] = {"h","h","Omega_ini_dcdm","Omega_ini_dcdm",
                                         "scf_shooting_parameter","Omega_dcdmdr","omega_dcdmdr",
                                         "alpha_squared","power_of_mu","log10_f_axion","phi_ini_scf",
                                         "V0_phi2n","ac_from_aeq","A_s"};
   /* for each target, module up to which we need to run CLASS in order
      to compute the targetted quantities (not running the whole code
      each time to saves a lot of time) */
-     enum computation_stage target_cs[] = {cs_thermodynamics, cs_background, cs_background,
+     enum computation_stage target_cs[] = {cs_thermodynamics,cs_thermodynamics, cs_background, cs_background,
                                            cs_background, cs_background, cs_background,
                                            cs_background, cs_background, cs_background,
                                            cs_background, cs_background, cs_background, cs_nonlinear};
@@ -1494,6 +1494,7 @@ int input_get_guess(double *xguess,
   for (index_guess=0; index_guess < pfzw->target_size; index_guess++) {
     switch (pfzw->target_name[index_guess]) {
       case theta_s:
+      case theta_s_100:
         xguess[index_guess] = 3.54*pow(pfzw->target_value[index_guess],2)-5.455*pfzw->target_value[index_guess]+2.548;
         dxdy[index_guess] = (7.08*pfzw->target_value[index_guess]-5.455);
         /** - Update pb to reflect guess */
@@ -2000,6 +2001,7 @@ int input_try_unknown_parameters(double * unknown_parameter,
   for (i=0; i < pfzw->target_size; i++) {
     switch (pfzw->target_name[i]) {
       case theta_s:
+      case theta_s_100:
         output[i] = 100.*th.rs_rec/th.ra_rec-pfzw->target_value[i];
         if(input_verbose>10)printf(" pfzw->target_value[i] %e output[i] %e\n", pfzw->target_value[i],100.*th.rs_rec/th.ra_rec);
         break;
