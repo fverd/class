@@ -2369,9 +2369,11 @@ int hmcode_noradiation_growth_init(
   phg->Tcmb = pba->T_cmb;
   phg->om_m = pba->Omega0_m*pba->h*pba->h;
   phg->fnu = pba->Omega0_ncdm_tot/pba->Omega0_m;
-  class_test(pba->Omega0_scf>0,
-             pfo->error_message,
-             "Cannot use scalar field scf with HMcode (not yet coded)");
+
+  // FRA: bypassing error message when scf: is it anyway in the matter?
+  // class_test(pba->Omega0_scf>0,
+  //            pfo->error_message,
+  //            "Cannot use scalar field scf with HMcode (not yet coded)");
 
   class_call(hmcode_noradiation_growth_compute(pfo, phw),
              phw->phg->error_message,
