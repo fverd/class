@@ -1334,7 +1334,7 @@ int perturbations_indices(
         ppt->has_lss = _TRUE_;
         ppt->has_source_delta_m = _TRUE_;
 
-        if (pba->has_ncdm == _TRUE_){
+        if (pba->has_ncdm == _TRUE_ || pba->has_scf== _TRUE_) { //FRA: added has_scf
           ppt->has_source_delta_cb = _TRUE_;
         }
       }

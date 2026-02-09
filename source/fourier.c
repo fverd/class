@@ -2002,7 +2002,7 @@ int fourier_indices(
       first) */
 
   pfo->has_pk_m = _TRUE_;
-  if (pba->has_ncdm == _TRUE_) {
+  if (pba->has_ncdm == _TRUE_ || pba->has_scf== _TRUE_) { //FRA: added has_scf
     pfo->has_pk_cb = _TRUE_;
   }
   else {
