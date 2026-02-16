@@ -236,7 +236,7 @@ int hmcode_compute(
   /** Compute background quantitites today */
 
   Omega0_m = pba->Omega0_m;
-  fnu      = pba->Omega0_ncdm_tot/Omega0_m;
+  fnu      = (pba->Omega0_ncdm_tot + pba->Omega0_scf)/Omega0_m; //FRA: added has_scf, as the scalar field is not clustered and should not be included in the matter density for the HMcode computation
 
   /** If index_pk_cb, choose Omega0_cb as the matter density parameter.
    * If index_pk_m, choose Omega0_cbn as the matter density parameter. */
@@ -295,8 +295,10 @@ int hmcode_compute(
   }
 
   /** Test whether pk_cb has to be taken into account (only if we have massive neutrinos)*/
-  if (pba->has_ncdm==_TRUE_){
+  if (pba->has_ncdm==_TRUE_ || pba->has_scf== _TRUE_) { //FRA: added has_scf
     index_pk_cb = pfo->index_pk_cb;
+    // FRA: as I need halofit only for the lensing, and lensing is computed with the total matter power spectrum, I need only to compute HMcode for the total matter power spectrum, not for the cb power spectrum. So I discard index_pk_cb that throws some error.
+    index_pk_cb = index_pk;
   }
   else {
     index_pk_cb = index_pk;
@@ -482,7 +484,6 @@ int hmcode_compute(
   r_nl = (nu_nl-nu_arr[index_nl])/(nu_arr[index_nl+1]-nu_arr[index_nl])*(r_real[index_nl+1]-r_real[index_nl]) + r_real[index_nl];
   // for debugging: (if it happens that r_nl is not between r1 and r2, which should never be the case)
   //fprintf(stdout, "r1=%e nu1=%e r2=%e nu2=%e\n", r1, nu_arr[index_nl-1], r2, nu_arr[index_nl+2]);
-
 
   // do iteration between r1 and r2 to find the precise value of r_nl --> TODO :: speed up by semi-newtonian iterations
   counter = 0;
@@ -1624,7 +1625,7 @@ int hmcode_sigma8_at_z(
   }
 
 
-  if (pba->has_ncdm == _TRUE_){
+  if (pba->has_ncdm == _TRUE_ || pba->has_scf== _TRUE_) { //FRA: added has_scf
 
     if (pfo->tau_size == 1) {
       *sigma_8_cb = phw->sigma_8[pfo->index_pk_cb][0];
@@ -1699,7 +1700,7 @@ int hmcode_sigmadisp_at_z(
                pfo->error_message);
   }
 
-  if (pba->has_ncdm == _TRUE_){
+  if (pba->has_ncdm == _TRUE_ || pba->has_scf== _TRUE_) { //FRA: added has_scf
 
     if (pfo->tau_size == 1) {
       *sigma_disp_cb = phw->sigma_disp[pfo->index_pk_cb][0];
@@ -1774,7 +1775,7 @@ int hmcode_sigmadisp100_at_z(
                pfo->error_message);
   }
 
-  if (pba->has_ncdm == _TRUE_){
+  if (pba->has_ncdm == _TRUE_ || pba->has_scf== _TRUE_) { //FRA: added has_scf
 
     if (pfo->tau_size == 1) {
       *sigma_disp_100_cb = phw->sigma_disp_100[pfo->index_pk_cb][0];
@@ -1849,7 +1850,7 @@ int hmcode_sigmaprime_at_z(
                pfo->error_message);
   }
 
-  if (pba->has_ncdm == _TRUE_){
+  if (pba->has_ncdm == _TRUE_ || pba->has_scf== _TRUE_) { //FRA: added has_scf
 
     if (pfo->tau_size == 1) {
       *sigma_prime_cb = phw->sigma_prime[pfo->index_pk_cb][0];
